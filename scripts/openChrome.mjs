@@ -25,6 +25,9 @@ const typeString = (text) => {
         } else if (char === '-') {
             // Hífen (-) é digitado sem Shift
             robot.keyTap('-');
+        } else if (char === 'ã') {
+            robot.keyTap('backquote', ['shift']);
+            robot.keyTap('a');
         } else {
             // Caracteres especiais podem ser tratados com Shift
             robot.keyTap(char, ['shift']);
@@ -51,7 +54,7 @@ exec('google-chrome --new-window "https://www.tixr.com"', (error) => {
         const y = screenSize.height / 4;
 
         robot.moveMouse(x, y);
-        robot.mouseClick(); // Clica na janela para ativá-la
+        // robot.mouseClick(); // Clica na janela para ativá-la
 
         setTimeout(() => {
             console.log("Abrindo o console do desenvolvedor...");
@@ -279,7 +282,7 @@ exec('google-chrome --new-window "https://www.tixr.com"', (error) => {
                                                         robot.keyToggle("shift", "up");
 
                                                         setTimeout(() => {
-                                                            typeString("Warcraft 30th Anniversary World Tour - Toronto");
+                                                            typeString("Warcraft 30th Anniversary World Tour - S");
 
                                                             setTimeout(() => {
                                                                 robot.keyToggle("control", "down");
@@ -299,7 +302,7 @@ exec('google-chrome --new-window "https://www.tixr.com"', (error) => {
                                                                                     console.log("A lista de eventos está vazia!");
                                                                                 } else {
                                                                                     // Clica no primeiro elemento encontrado
-                                                                                    eventItems[0].click();
+                                                                                    eventItems[1].click();
                                                                                     console.log("Primeiro evento clicado!");
                                                                                 }
                                                                             } else {
@@ -315,14 +318,20 @@ exec('google-chrome --new-window "https://www.tixr.com"', (error) => {
                                                                     setTimeout(() => {
                                                                         robot.keyTap("v", ["control"]); // Cola o script
                                                                         robot.keyTap("enter"); // Executa o script
-                                                                        
+
                                                                         robot.keyToggle("control", "down");
                                                                         robot.keyToggle("shift", "down");
                                                                         robot.keyTap("j");
                                                                         robot.keyToggle("control", "up");
-                                                                        robot.keyToggle("shift", "up");                                                                            
+                                                                        robot.keyToggle("shift", "up");
 
                                                                         setTimeout(() => {
+
+                                                                            robot.keyToggle("control", "down");
+                                                                            robot.keyToggle("shift", "down");
+                                                                            robot.keyTap("j");
+                                                                            robot.keyToggle("control", "up");
+                                                                            robot.keyToggle("shift", "up");
 
                                                                             const enterToOrder = `setTimeout(() => {
                                                                                 let carouselContainer = document.querySelector('.carousels');
@@ -340,29 +349,124 @@ exec('google-chrome --new-window "https://www.tixr.com"', (error) => {
                                                                                 } else {
                                                                                     console.error("Nenhum link 'More Info' encontrado dentro do carrossel!");
                                                                                 }
-                                                                            }, 3000)`; // Aguarda 3 segundos                                                                            
-    
+                                                                            }, 5000)`; // Aguarda 3 segundos                                                                            
+
                                                                             clipboard.writeSync(enterToOrder);
                                                                             console.log("Script copiado para abrir o link do evento");
 
-                                                                            robot.keyToggle("control", "down");
-                                                                            robot.keyToggle("shift", "down");
-                                                                            robot.keyTap("j");
-                                                                            robot.keyToggle("control", "up");
-                                                                            robot.keyToggle("shift", "up");
-                                                                            
-                                                                            robot.keyTap("v", ["control"]); // Cola o script
-                                                                            robot.keyTap("enter"); // Executa o script
                                                                             
                                                                             setTimeout(() => {
-                                                                                robot.keyToggle("control", "down");
-                                                                                robot.keyToggle("shift", "down");
-                                                                                robot.keyTap("j");
-                                                                                robot.keyToggle("control", "up");
-                                                                                robot.keyToggle("shift", "up");  
+                                                                                robot.keyTap("v", ["control"]); // Cola o script
+                                                                                robot.keyTap("enter"); // Executa o script
+
+                                                                                
+                                                                                setTimeout(() => {
+
+                                                                                    robot.keyToggle("control", "down");
+                                                                                    robot.keyToggle("shift", "down");
+                                                                                    robot.keyTap("j");
+                                                                                    robot.keyToggle("control", "up");
+                                                                                    robot.keyToggle("shift", "up");
+                                                                                    
+                                                                                    const checkOrderExists = `const socket = new WebSocket("ws://localhost:8080");
+
+                                                                                    socket.onopen = () => {
+                                                                                        console.log("✅ Conectado ao WebSocket do Node.js");
+                                                                                    
+                                                                                        setTimeout(() => {
+                                                                                            let formCheck = document.querySelector('.price-content');
+                                                                                    
+                                                                                            if (!formCheck || !formCheck.innerHTML.trim()) {
+                                                                                                console.log("Nenhum formulário encontrado ainda!");
+                                                                                                return;
+                                                                                            } 
+                                                                                    
+                                                                                            console.log("🔹 Formulário detectado. Enviando alerta...");
+                                                                                    
+                                                                                            socket.send(JSON.stringify({
+                                                                                                url: window.location.href,
+                                                                                                msg: "Formulário de checkout detectado!"
+                                                                                            }));
+                                                                                    
+                                                                                            socket.onmessage = (event) => {
+                                                                                                console.log("📩 Resposta do servidor:", event.data);
+                                                                                            };
+                                                                                        }, 5000);
+                                                                                    };`;
+                                                                                    
+                                                                                    clipboard.writeSync(checkOrderExists);
+
+                                                                                    console.log("✅ Script copiado para verificar se a venda já começou!");                                                                                    
+                                                                                    
+                                                                                    setTimeout(() => {
+                                                                                        robot.keyToggle("control", "down");
+                                                                                        robot.keyToggle("shift", "down");
+                                                                                        robot.keyTap("j");
+                                                                                        robot.keyToggle("control", "up");
+                                                                                        robot.keyToggle("shift", "up");
+                                                                                        
+                                                                                        setTimeout(() => {
+                                                                                            robot.keyTap("v", ["control"]); // Cola o script
+                                                                                            robot.keyTap("enter"); // Executa o script
+                                                                                            
+                                                                                            setTimeout(() => {
+                                                                                                robot.keyToggle("control", "down");
+                                                                                                robot.keyToggle("shift", "down");
+                                                                                                robot.keyTap("j");
+                                                                                                robot.keyToggle("control", "up");
+                                                                                                robot.keyToggle("shift", "up");
+                                                                                                
+                                                                                                setTimeout(() => {
+                                                                                                    const clickLogout = `setTimeout(() => {
+                                                                                                        let logoutButton = document.querySelector("a.logged-in.logout.link");
+                                                                                                    
+                                                                                                        if (!logoutButton) {
+                                                                                                            console.log("❌ Botão de logout não encontrado!");
+                                                                                                            return;
+                                                                                                        } 
+                                                                                                    
+                                                                                                        console.log("✅ Botão de logout encontrado! Clicando...");
+                                                                                                        logoutButton.click();
+                                                                                                    }, 2000);`;
+                                                                                                    
+                                                                                                    clipboard.writeSync(clickLogout);
+                                                                                                    console.log("✅ Script copiado para clicar no botão de logout!");
+                                                                                                                         
+                                                                                                    robot.keyToggle("control", "down");
+                                                                                                    robot.keyToggle("shift", "down");
+                                                                                                    robot.keyTap("j");
+                                                                                                    robot.keyToggle("control", "up");
+                                                                                                    robot.keyToggle("shift", "up");
+                                                                                                    
+                                                                                                    setTimeout(() => {
+                                                                                                        robot.keyTap("v", ["control"]);
+                                                                                                        robot.keyTap("enter");                                                                                                                    
+                                                                                                    
+                                                                                                        setTimeout(() => {
+                                                                                                            console.log("🛑 Fechando o navegador...");
+                                                                                                            robot.keyTap("f4", ["alt"]);
+                                                                                                        }, 3000);
+
+                                                                                                    }, 3000);
+
+                                                                                                }, 3000);
+                                                                                                
+                                                                                            }, 3000);
+
+                                                                                        }, 3000);
+                                                                                        
+                                                                                    }, 3000);
+                                                                                    
+                                                                                }, 3000);
+                                                                                
+
+
+
+
+
                                                                             }, 3000);
-                                                                            
-                                                                            
+
+
                                                                         }, 3000);
 
                                                                     }, 3000);
@@ -375,7 +479,7 @@ exec('google-chrome --new-window "https://www.tixr.com"', (error) => {
 
                                                     }, 3000);
 
-                                                    
+
 
                                                 }, 4000);
                                             }, 4000);
